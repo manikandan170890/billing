@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Billing</title>
+  </head>
+  <body>
+  <div class="container">
+		<h1>Invoice</h1>
+			<form name="invoiceForm" id="invoiceForm" method="POST" action="genpdf.php">
+			<div class="row">
+				<div class="col-sm-6">
+					<h3>Enter Customer Details </h3>
+				</div>
+				<div class="col-sm-6 ">
+					<button class="btn btn-success float-right" name="invoiceFormSubmit" id="invoiceFormSubmit">Submit</button>
+				</div>
+			</div>
+				<div class="border border-light rounded p-3 bg-light text-dark" >
+					<div class="form-group row">
+						<label for="inputPassword" class="col-sm-2 col-form-label">Customer/Company Name</label>
+						<div class="col-sm-10">
+						<input type="text" class="form-control" name="cName" id="cName" placeholder="Name">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="inputPassword" class="col-sm-2 col-form-label">Address1</label>
+						<div class="col-sm-10">
+						<input type="text" class="form-control" name="Address1" id="Address1" placeholder="Address1">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="inputPassword" class="col-sm-2 col-form-label">Address2</label>
+						<div class="col-sm-10">
+						<input type="text" class="form-control" name="Address2" id="Address2" placeholder="Address2">
+						</div>
+					</div>				
+					<div class="row">
+						  <div class="col-md-5 mb-3">
+							<label for="country">City</label>
+							<input type="text" class="form-control" name="city" id="city" placeholder="City">               
+						  </div>
+						  <div class="col-md-4 mb-3">
+							<label for="state">State</label>
+							<input type="text" class="form-control" name="state" id="state" placeholder="State">               
+						  </div>
+						  <div class="col-md-3 mb-3">
+							<label for="zip">Pincode</label>
+						   <input type="text" class="form-control" name="pincode" id="pincode" placeholder="Pincode">
+						  </div>
+					</div>			
+					<div class="form-group row">
+						<label for="inputPassword" class="col-sm-2 col-form-label">GSTIN</label>
+						<div class="col-sm-10">
+						<input type="text" class="form-control" name="gstin" id="gstin" placeholder="GSTIN">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<h3>Enter Product Details - Total: <span id="total">3699</span></h3>
+					</div>
+					
+				</div>
+				
+				<div class="border border-light rounded p-3 bg-light text-dark" >					
+				
+				
+				<table>
+						<thead>
+								<tr>
+								<th>Item Name</th>
+								<th>Price</th>
+								<th>#</th>
+								</tr>
+						</thead>
+						<tbody class="addedItem ">
+							<tr class="tblRow" >
+									<td><input type="text" class="form-control" name="itemName[]" placeholder="Name"></td>
+									<td><input type="text" class="form-control price" name="itemPrice[]" id="rowId1" onChange="funTotal()" placeholder="Name"></td>
+									<td><button type="button" class="btn btn-primary" id="addItem" >Add Item</button></td>
+							</tr>
+						</tbody>
+						
+				</table>
+						
+				</div>
+			</form>
+			
+		
+	</div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script>
+			function addItemIput(countRow){
+				var sum = countRow + 1;
+				var addon ='';
+				addon += '<tr class="tblRow" id="trRowId'+sum+'">';
+				addon += '<td><input type="text" class="form-control" name="itemName[]" id="itemName" placeholder="Name"></td>';
+				addon += '<td><input type="text" class="form-control price"  name="itemPrice[]" id="rowId'+sum+'" onChange="funTotal()" placeholder="Name"></td>';
+				addon += '<td><button type="button" class="btn btn-danger text-white" id="addItem" >-</button></td>';
+				addon += '</tr>';
+				return addon;
+			}
+			
+			$('#addItem').click(function(){
+				var countRow = $('.tblRow').length;
+				$('.addedItem').append(addItemIput(countRow));	
+			});
+			
+			
+			function funTotal(){
+				var countRow = $('.tblRow').length;
+				var totalPrice = 0;
+				for(var i=1;i<=countRow;i++){				
+					totalPrice = parseInt(totalPrice) + parseInt($('#rowId'+i).val());
+				}				
+				$('#total').html(totalPrice);
+			}
+			
+			
+	</script>
+  </body>
+</html>
